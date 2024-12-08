@@ -33,19 +33,17 @@ namespace api_portal.Model
         public string Role { get; set; }
 
         [MaxLength(250)]
-        public string Address { get; set; }
+        public string? Address { get; set; }  
 
         [MaxLength(15)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; } 
 
         [Required]
         [MaxLength(10)]
         public string Status { get; set; } = "Active";
 
-
         public ICollection<Order> Orders { get; set; }
         public Cart Cart { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; }
-
     }
 }

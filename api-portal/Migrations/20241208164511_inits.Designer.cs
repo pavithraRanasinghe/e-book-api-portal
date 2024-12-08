@@ -12,8 +12,8 @@ using api_portal.Data;
 namespace api_portal.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241202155438_init")]
-    partial class init
+    [Migration("20241208164511_inits")]
+    partial class inits
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,7 +251,6 @@ namespace api_portal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -270,7 +269,6 @@ namespace api_portal.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
