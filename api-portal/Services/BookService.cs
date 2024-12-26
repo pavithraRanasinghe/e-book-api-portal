@@ -15,7 +15,7 @@ namespace api_portal.Services
 
         public IEnumerable<Book> FindAll()
         {
-            return _dbContext.Books.ToList();
+            return [.. _dbContext.Books];
         }
 
         public Book FindById(int id)
@@ -64,7 +64,7 @@ namespace api_portal.Services
             return book;
         }
 
-        public IEnumerable<Book> SearchAndFilter(string searchTerm, string genre, decimal? minPrice, decimal? maxPrice)
+        public IEnumerable<Book> SearchAndFilter(string? searchTerm, string? genre, decimal? minPrice, decimal? maxPrice)
         {
             var query = _dbContext.Books.AsQueryable();
 

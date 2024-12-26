@@ -23,41 +23,37 @@ namespace api_portal.Util
 
         private void AddInitialUsers()
         {
-            // Check if any users exist
-            if (!_context.Users.Any())
+            if (!_context.Users.Any(u => u.Role == UserRole.Admin.ToString() && u.Email == "admin@esoft.com"))
             {
-                if (!_context.Users.Any(u => u.Role == UserRole.Admin.ToString() && u.Email == "EsoftAdmin"))
+                // Add Admin user
+                var adminUser = new User
                 {
-                    // Add Admin user
-                    var adminUser = new User
-                    {
-                        Name = "Esoft Admin",
-                        Email = "admin@esoft.com",
-                        Password = BCrypt.Net.BCrypt.HashPassword("EsoftAdmin"),
-                        Phone = "1234567890",
-                        Role = UserRole.Admin.ToString(),
-                        Status = "Active"
-                    };
-                    _context.Users.Add(adminUser);
-                }
-
-                if (!_context.Users.Any(u => u.Role == UserRole.RegisteredCustomer.ToString() && u.Email == "EsoftCustomer"))
-                {
-
-                    // Add Customer user
-                    var customerUser = new User
-                    {
-                        Name = "Esoft Customer",
-                        Email = "customer@esoft.com",
-                        Phone = "1234567890",
-                        Password = BCrypt.Net.BCrypt.HashPassword("EsoftCustomer"),
-                        Role = UserRole.RegisteredCustomer.ToString(),
-                        Status = "Active"
-                    };
-                    _context.Users.Add(customerUser);
-                }
-                _context.SaveChanges();
+                    Name = "Esoft Admin",
+                    Email = "admin@esoft.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("EsoftAdmin"),
+                    Phone = "1234567890",
+                    Role = UserRole.Admin.ToString(),
+                    Status = "Active"
+                };
+                _context.Users.Add(adminUser);
             }
+
+            if (!_context.Users.Any(u => u.Role == UserRole.Customer.ToString() && u.Email == "customer@esoft.com"))
+            {
+
+                // Add Customer user
+                var customerUser = new User
+                {
+                    Name = "Esoft Customer",
+                    Email = "customer@esoft.com",
+                    Phone = "1234567890",
+                    Password = BCrypt.Net.BCrypt.HashPassword("EsoftCustomer"),
+                    Role = UserRole.Customer.ToString(),
+                    Status = "Active"
+                };
+                _context.Users.Add(customerUser);
+            }
+            _context.SaveChanges();
         }
     }
 }

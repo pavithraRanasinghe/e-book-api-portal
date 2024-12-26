@@ -1,5 +1,4 @@
 ﻿using api_portal.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_portal.Controllers
@@ -25,15 +24,9 @@ namespace api_portal.Controllers
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
-            return Ok(new { Token = token });
+            return Ok(token);
         }
 
-        [Authorize]
-        [HttpGet("profile")]
-        public IActionResult GetUserProfile()
-        {
-            return Ok(new { message = "This is a E-Book protected route" });
-        }
     }
 
     public class LoginRequest

@@ -18,7 +18,7 @@ namespace api_portal.Controllers
         [HttpPost]
         public IActionResult AddToCart([FromBody] CartRequest request)
         {
-            if (request == null || request.Quantity <= 0)
+            if (request == null)
             {
                 return BadRequest("Invalid cart data.");
             }

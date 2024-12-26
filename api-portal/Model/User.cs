@@ -8,7 +8,8 @@ namespace api_portal.Model
     {
         Admin,
         RegisteredCustomer,
-        GuestCustomer
+        GuestCustomer,
+        Customer
     }
     public class User
     {

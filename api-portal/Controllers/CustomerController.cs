@@ -1,5 +1,6 @@
 ﻿using api_portal.Dto;
 using api_portal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace api_portal.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CustomerController(CustomerService customerService) : ControllerBase
     {
         private readonly CustomerService _customerService = customerService;

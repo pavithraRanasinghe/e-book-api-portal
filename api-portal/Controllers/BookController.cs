@@ -1,5 +1,6 @@
 ﻿using api_portal.Dto;
 using api_portal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_portal.Controllers
@@ -61,8 +62,8 @@ namespace api_portal.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult SearchAndFilter([FromQuery] string searchTerm,
-            [FromQuery] string genre,
+        public IActionResult SearchAndFilter([FromQuery] string? searchTerm,
+            [FromQuery] string? genre,
             [FromQuery] decimal? minPrice,
             [FromQuery] decimal? maxPrice)
         {

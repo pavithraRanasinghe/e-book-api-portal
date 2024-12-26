@@ -1,4 +1,5 @@
 ﻿using api_portal.Data;
+using api_portal.Dto.Response;
 using api_portal.Model;
 using api_portal.Security;
 using BCrypt.Net;  // Import BCrypt.Net
@@ -17,7 +18,7 @@ namespace api_portal.Services
         }
 
         // Login method
-        public string Login(string email, string password)
+        public LoginResponse Login(string email, string password)
         {
             var user = _dbContext.Users.SingleOrDefault(u => u.Email == email);
 
@@ -27,7 +28,15 @@ namespace api_portal.Services
             }
 
             // Return JWT token
-            return _jwtTokenService.GenerateToken(user.Email, user.Role);
+            var token = _jwtTokenService.GenerateToken(user.Email, user.Role);
+
+
+            return new LoginResponse
+            {
+                Name = user.Name,
+                Role = user.Role,
+                Token = token,
+            };
         }
 
         // Password verification using BCrypt
