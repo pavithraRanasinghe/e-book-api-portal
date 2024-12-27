@@ -23,8 +23,8 @@ namespace api_portal.Controllers
                 return BadRequest("Invalid cart data.");
             }
 
-            var cart = _cartService.AddToCart(request);
-            return Ok(cart);
+            _cartService.AddToCart(request);
+            return Ok();
         }
 
         [HttpGet("user/{userId}")]

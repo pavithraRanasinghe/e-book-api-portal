@@ -33,6 +33,7 @@ namespace api_portal.Services
 
             return new LoginResponse
             {
+                Id = user.UserID,
                 Name = user.Name,
                 Role = user.Role,
                 Token = token,
