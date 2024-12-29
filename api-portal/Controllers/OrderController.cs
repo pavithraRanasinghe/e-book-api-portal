@@ -30,7 +30,7 @@ namespace api_portal.Controllers
                 return BadRequest("Cart is empty or invalid.");
             }
 
-            return Ok(order);
+            return Ok();
         }
 
         [HttpGet]
@@ -64,6 +64,19 @@ namespace api_portal.Controllers
             }
 
             return Ok(orders);
+        }
+
+        [HttpDelete("{orderId}")]
+        public IActionResult RemoveOrderById(int orderId)
+        {
+            var result = _orderService.RemoveOrderById(orderId);
+
+            if (!result)
+            {
+                return NotFound($"Order with ID {orderId} not found.");
+            }
+
+            return Ok($"Order with ID {orderId} has been removed successfully.");
         }
     }
 }

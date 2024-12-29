@@ -149,5 +149,33 @@ namespace api_portal.Services
                         }).ToList()
                 }).ToList();
         }
+
+        public bool RemoveOrderById(int orderId)
+        {
+            var order = _dbContext.Orders.SingleOrDefault(o => o.OrderID == orderId);
+
+            if (order == null)
+            {
+                return false; // Order not found
+            }
+
+            // Remove related order items
+            var orderItems = _dbContext.OrderItems.Where(oi => oi.OrderID == orderId).ToList();
+            _dbContext.OrderItems.RemoveRange(orderItems);
+
+            // Remove payment record
+            var payment = _dbContext.Payments.SingleOrDefault(p => p.OrderID == orderId);
+            if (payment != null)
+            {
+                _dbContext.Payments.Remove(payment);
+            }
+
+            // Remove the order
+            _dbContext.Orders.Remove(order);
+
+            _dbContext.SaveChanges();
+            return true;
+        }
+
     }
 }
