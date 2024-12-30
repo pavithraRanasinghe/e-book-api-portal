@@ -1,6 +1,7 @@
 ﻿using api_portal.Data;
 using api_portal.Dto;
 using api_portal.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_portal.Services
 {
@@ -70,6 +71,32 @@ namespace api_portal.Services
                             Book = _dbContext.Books.SingleOrDefault(b => b.BookID == ci.BookID)
                         }).ToList()
                 }).SingleOrDefault();
+        }
+
+        public bool RemoveFromCart(int userId, int bookId)
+        {
+            var cart = _dbContext.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefault(c => c.UserID == userId);
+
+            if (cart == null)
+            {
+                return false;
+            }
+
+            // Find the cart item based on bookId
+            var cartItem = cart.CartItems
+                .FirstOrDefault(ci => ci.BookID == bookId);
+
+            if (cartItem == null)
+            {
+                return false;
+            }
+
+            cart.CartItems.Remove(cartItem);
+            _dbContext.SaveChanges();
+
+            return true;
         }
     }
 }

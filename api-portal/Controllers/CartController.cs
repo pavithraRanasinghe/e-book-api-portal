@@ -39,5 +39,18 @@ namespace api_portal.Controllers
 
             return Ok(cart);
         }
+
+        [HttpDelete("remove/{userId}/{bookId}")]
+        public IActionResult RemoveFromCart(int userId, int bookId)
+        {
+            var isRemoved = _cartService.RemoveFromCart(userId, bookId);
+
+            if (!isRemoved)
+            {
+                return NotFound($"Item with BookID {bookId} not found in the cart for UserID {userId}.");
+            }
+
+            return Ok($"Item with BookID {bookId} has been removed from the cart for UserID {userId}.");
+        }
     }
 }
