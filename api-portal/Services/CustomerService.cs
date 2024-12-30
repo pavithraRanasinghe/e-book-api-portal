@@ -21,12 +21,12 @@ namespace api_portal.Services
             {
                 return false; // Email already exists
             }
-
+            
             var user = new User
             {
                 Name = request.Name,
                 Email = request.Email,
-                Password = HashPassword(request.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = "Customer",
                 Address = request.Address,
                 Phone = request.Phone
@@ -36,12 +36,6 @@ namespace api_portal.Services
             _dbContext.SaveChanges();
 
             return true;
-        }
-
-        private string HashPassword(string password)
-        {
-            using var sha256 = SHA256.Create();
-            return Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(password)));
         }
 
         public IEnumerable<User> FindAll()

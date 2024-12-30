@@ -8,7 +8,6 @@ namespace api_portal.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class CustomerController(CustomerService customerService) : ControllerBase
     {
         private readonly CustomerService _customerService = customerService;
@@ -32,6 +31,7 @@ namespace api_portal.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult FindAll()
         {
             var customers = _customerService.FindAll();
@@ -39,6 +39,7 @@ namespace api_portal.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult FindById(int id)
         {
             var customer = _customerService.FindById(id);

@@ -2,7 +2,6 @@
 using api_portal.Dto.Response;
 using api_portal.Model;
 using api_portal.Security;
-using BCrypt.Net;  // Import BCrypt.Net
 
 namespace api_portal.Services
 {
