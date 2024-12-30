@@ -1,6 +1,8 @@
 ﻿using api_portal.Data;
 using api_portal.Dto;
+using api_portal.Dto.Response;
 using api_portal.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_portal.Services
 {
@@ -79,28 +81,55 @@ namespace api_portal.Services
 
             return order;
         }
-        public IEnumerable<Order> FindAllOrders()
+
+        public bool UpdateOrderStatus(int orderId, string newStatus)
         {
-            return _dbContext.Orders
-                .Select(order => new Order
+            var order = _dbContext.Orders.SingleOrDefault(o => o.OrderID == orderId);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            order.OrderStatus = newStatus;
+            _dbContext.SaveChanges();
+            return true;
+        }
+
+
+        public IEnumerable<OrderDto> FindAllOrders()
+        {
+            var orders = _dbContext.Orders
+                .Include(o => o.OrderItems) 
+                    .ThenInclude(oi => oi.Book)
+                .Select(order => new OrderDto
                 {
                     OrderID = order.OrderID,
                     UserID = order.UserID,
+                    Customer = order.User.Name,
                     OrderDate = order.OrderDate,
                     TotalAmount = order.TotalAmount,
                     OrderStatus = order.OrderStatus,
-                    OrderItems = _dbContext.OrderItems
-                        .Where(oi => oi.OrderID == order.OrderID)
-                        .Select(oi => new OrderItem
+                    OrderItems = order.OrderItems.Select(oi => new OrderItemDto
+                    {
+                        OrderItemID = oi.OrderItemID,
+                        BookID = oi.BookID,
+                        Quantity = oi.Quantity,
+                        Subtotal = oi.Subtotal,
+                        Book = new BookDto
                         {
-                            OrderItemID = oi.OrderItemID,
-                            BookID = oi.BookID,
-                            Quantity = oi.Quantity,
-                            Subtotal = oi.Subtotal,
-                            Book = _dbContext.Books.SingleOrDefault(b => b.BookID == oi.BookID)
-                        }).ToList()
-                }).ToList();
+                            BookID = oi.Book.BookID,
+                            Title = oi.Book.Title,
+                            Author = oi.Book.Author,
+                            Price = oi.Book.Price
+                        }
+                    }).ToList()
+                })
+                .ToList();
+
+            return orders;
         }
+
 
         public IEnumerable<Order> FindOrdersByUserId(int userId)
         {

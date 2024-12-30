@@ -33,6 +33,24 @@ namespace api_portal.Controllers
             return Ok();
         }
 
+        [HttpPut("{orderId}/status")]
+        public IActionResult UpdateOrderStatus(int orderId, [FromBody] UpdateOrderStatusRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.NewStatus))
+            {
+                return BadRequest("Order status cannot be empty.");
+            }
+
+            var isUpdated = _orderService.UpdateOrderStatus(orderId, request.NewStatus);
+
+            if (!isUpdated)
+            {
+                return NotFound($"Order with ID {orderId} was not found.");
+            }
+
+            return Ok($"Order ID {orderId} status updated to '{request.NewStatus}'.");
+        }
+
         [HttpGet]
         public IActionResult FindAllOrders()
         {
@@ -78,5 +96,11 @@ namespace api_portal.Controllers
 
             return Ok($"Order with ID {orderId} has been removed successfully.");
         }
+
+    }
+
+    public class UpdateOrderStatusRequest
+    {
+        public string NewStatus { get; set; }
     }
 }
