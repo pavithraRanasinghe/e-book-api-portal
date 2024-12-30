@@ -57,6 +57,7 @@ builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<DashboardService>();
 
 var app = builder.Build();
 
