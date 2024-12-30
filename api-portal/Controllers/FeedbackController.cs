@@ -13,10 +13,6 @@ namespace api_portal.Controllers
         [HttpPost]
         public IActionResult CreateFeedback([FromBody] FeedbackRequest request)
         {
-            if (request == null || request.Rating < 1 || request.Rating > 5)
-            {
-                return BadRequest("Invalid feedback data.");
-            }
 
             var feedback = _feedbackService.CreateFeedback(request);
             return CreatedAtAction(nameof(GetAllFeedback), new { id = feedback.FeedbackID }, feedback);

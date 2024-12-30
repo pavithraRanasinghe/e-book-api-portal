@@ -52,5 +52,11 @@ namespace api_portal.Services
         {
             return _dbContext.Users.SingleOrDefault(u => u.Email == email);
         }
+
+        // Find user by id to check if they exist
+        public User FindById(int id)
+        {
+            return _dbContext.Users.SingleOrDefault(u => u.UserID == id);
+        }
     }
 }

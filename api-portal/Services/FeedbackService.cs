@@ -1,16 +1,20 @@
 ﻿using api_portal.Data;
 using api_portal.Dto;
+using api_portal.Dto.Response;
 using api_portal.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_portal.Services
 {
     public class FeedbackService
     {
         private readonly ApplicationDBContext _dbContext;
+        private AuthService _authService;
 
-        public FeedbackService(ApplicationDBContext dbContext)
+        public FeedbackService(ApplicationDBContext dbContext, AuthService authService)
         {
             _dbContext = dbContext;
+            _authService = authService;
         }
 
         public Feedback CreateFeedback(FeedbackRequest request)
@@ -19,7 +23,6 @@ namespace api_portal.Services
             {
                 UserID = request.UserID,
                 BookID = request.BookID,
-                Rating = request.Rating,
                 Comments = request.Comments,
                 FeedbackDate = System.DateTime.UtcNow
             };
@@ -35,10 +38,23 @@ namespace api_portal.Services
             return _dbContext.Feedbacks.ToList();
         }
 
-        public IEnumerable<Feedback> GetFeedbackByBook(int bookId)
+        public IEnumerable<FeedbackDto> GetFeedbackByBook(int bookId)
         {
-            return _dbContext.Feedbacks.Where(f => f.BookID == bookId).ToList();
+            var feedbackList = _dbContext.Feedbacks
+                .Where(f => f.BookID == bookId)
+                .Select(f => new FeedbackDto
+                {
+                    FeedbackID = f.FeedbackID,
+                    BookID = f.BookID,
+                    Comment = f.Comments,
+                    Date = f.FeedbackDate,
+                    UserName = f.User.Name
+                })
+                .ToList();
+
+            return feedbackList;
         }
+
 
         public IEnumerable<Feedback> GetFeedbackByUser(int userId)
         {

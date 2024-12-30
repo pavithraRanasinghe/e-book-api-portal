@@ -17,8 +17,6 @@ namespace api_portal.Model
 
         public DateTime FeedbackDate { get; set; }
 
-        public int Rating { get; set; }
-
         [MaxLength(500)]
         public string Comments { get; set; }
     }
